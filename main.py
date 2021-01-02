@@ -3,7 +3,7 @@
 # Added
 # Directory Clean up - Only retrieves files ending in mp3
 # Pause Button double function - Pause button does both pause and unpause
-# (WIP) Change Directory
+# Change Directory
 
 import pygame  # used to create video games
 import tkinter as tkr  # used to develop GUI
@@ -14,12 +14,17 @@ music_player = tkr.Tk()
 music_player.title('Simple Mp3 Player')
 music_player.geometry("450x350")
 
-directory = askdirectory()
-os.chdir(directory)  # it permits to change the current dir
-song_list = os.listdir()  # it returns the list of files song
+
+def directory_init():
+    directory = askdirectory()
+    os.chdir(directory)  # it permits to change the current dir
+    song_list = os.listdir()  # it returns the list of files song
+
+    return song_list
+
 
 play_list = tkr.Listbox(music_player, font="Helvetica 12 bold", bg="yellow", selectmode=tkr.SINGLE)
-for item in song_list:
+for item in directory_init():
     if item.endswith(".mp3"):  # grabs files ending in MP3
         pos = 0
         play_list.insert(pos, item)
@@ -63,13 +68,10 @@ def pausebtn():
     # print(pause_active_state)
 
 
-def changedir():  # Unfinished
-    new_directory = askdirectory()
-    os.chdir(directory)  # it permits to change the current dir
-    new_song_list = os.listdir()  # it returns the list of files song
+def changedir():
 
     new_play_list = tkr.Listbox(music_player, font="Helvetica 12 bold", bg="yellow", selectmode=tkr.SINGLE)
-    for new_item in song_list:
+    for new_item in directory_init():
         if new_item.endswith(".mp3"):  # grabs files ending in MP3
             new_pos = 0
             play_list.insert(new_pos, new_item)
@@ -84,12 +86,12 @@ song_title = tkr.Label(music_player, font="Helvetica 12 bold", textvariable=var)
 Button1 = tkr.Button(music_player, width=5, height=3, font="Helvetica 12 bold", text="PLAY", command=play, bg="Blue", fg="Black")
 Button2 = tkr.Button(music_player, width=5, height=3, font="Helvetica 12 bold", text="STOP", command=stop, bg="Red", fg="Black")
 Button3 = tkr.Button(music_player, width=5, height=3, font="Helvetica 12 bold", text="PAUSE", command=pausebtn, bg="Purple", fg="Black")
-# Button4 = tkr.Button(music_player, width=5, height=3, font="Helvetica 12 bold", text="CHANGE DIRECTORY", command=changedir, bg="Purple", fg="Black")
+Button4 = tkr.Button(music_player, width=5, height=3, font="Helvetica 12 bold", text="CHANGE DIRECTORY", command=changedir, bg="Purple", fg="Black")
 
 song_title.pack()
 Button1.pack(fill="x")
 Button2.pack(fill="x")
 Button3.pack(fill="x")
-# Button4.pack(fill="x")
+Button4.pack(fill="x")
 play_list.pack(fill="both", expand="yes")
 music_player.mainloop()
