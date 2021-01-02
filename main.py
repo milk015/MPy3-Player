@@ -4,11 +4,14 @@
 # Directory Clean up - Only retrieves files ending in mp3
 # Pause Button double function - Pause button does both pause and unpause
 # Change Directory
+# Song length counter (Broken)
 
 import pygame  # used to create video games
 import tkinter as tkr  # used to develop GUI
 from tkinter.filedialog import askdirectory  # it permit to select dir
 import os  # it permits to interact with the operating system
+
+from mutagen.mp3 import MP3
 
 music_player = tkr.Tk()
 music_player.title('Simple Mp3 Player')
@@ -41,6 +44,12 @@ pause_active_state = False
 def play():
     pygame.mixer.music.load(play_list.get(tkr.ACTIVE))
     var.set(play_list.get(tkr.ACTIVE))
+    song_in_use = MP3(play_list.get(tkr.ACTIVE))
+    song_length = song_in_use.info.length
+    song_length = round(song_length / 60, 2)
+    song_length = str(song_length)
+    print(song_length)
+    song_length_string.set(song_length)
     pygame.mixer.music.play()
 
 
@@ -77,9 +86,14 @@ def changedir():
             play_list.insert(new_pos, new_item)
             new_pos += 1
 
+# song title and length
+
 
 var = tkr.StringVar()
 song_title = tkr.Label(music_player, font="Helvetica 12 bold", textvariable=var)
+song_length_string = tkr.StringVar()
+song_duration = tkr.Label(music_player, font="Helvetica 12 bold", textvariable=song_length_string)
+
 
 # GUI
 
@@ -89,6 +103,7 @@ Button3 = tkr.Button(music_player, width=5, height=3, font="Helvetica 12 bold", 
 Button4 = tkr.Button(music_player, width=5, height=3, font="Helvetica 12 bold", text="CHANGE DIRECTORY", command=changedir, bg="Purple", fg="Black")
 
 song_title.pack()
+song_duration.pack()
 Button1.pack(fill="x")
 Button2.pack(fill="x")
 Button3.pack(fill="x")
